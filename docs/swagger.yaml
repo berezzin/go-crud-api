@@ -1,0 +1,56 @@
+basePath: /
+definitions:
+  main.Item:
+    properties:
+      id:
+        description: Уникальный идентификатор
+        type: string
+      name:
+        description: Название
+        type: string
+      price:
+        description: Цена
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: CRUD API with default library
+  title: CRUD Go API
+  version: "1.0"
+paths:
+  /items:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/main.Item'
+            type: object
+      summary: Возвращает список объектов
+      tags:
+      - Items
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Новый объект
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/main.Item'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Item'
+      summary: Создает новый объект
+      tags:
+      - Items
+swagger: "2.0"
