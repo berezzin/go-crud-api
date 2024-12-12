@@ -12,6 +12,13 @@ definitions:
         description: Price
         type: number
     type: object
+  main.Response:
+    properties:
+      detail:
+        type: string
+      status:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -54,6 +61,33 @@ paths:
       tags:
       - Items
   /items/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Object's ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Item not found
+          schema:
+            type: string
+      summary: delete Item by ID.
+      tags:
+      - Items
     get:
       consumes:
       - application/json

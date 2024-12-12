@@ -23,6 +23,11 @@ type Item struct {
 	Price float64 `json:"price"` // Price
 }
 
+type Response struct {
+	Status string `json:"status"`
+	Detail string `json:"detail"`
+}
+
 var (
 	items = make(map[string]Item)
 	mutex sync.Mutex
@@ -92,6 +97,44 @@ func getItem(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(item)
 }
 
+// deleteItem Delete Item by ID.
+// @Summary delete Item by ID.
+// @Tags Items
+// @Accept json
+// @Produce json
+// @Param id path string true "Object's ID"
+// @Success 200 {object} Response
+// @Failure 404 {string} string "Item not found"
+// @Failure 400 {string} string "Bad request"
+// @Router /items/{id} [delete]
+func deleteItem(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/items/"):]
+	if id == "" {
+		http.Error(w, "ID didn't provided", http.StatusBadRequest)
+		return
+	}
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	_, exists := items[id]
+	if !exists {
+		http.Error(w, "Item not found", http.StatusNotFound)
+		return
+	}
+	delete(items, id)
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	response := Response{
+		Status: "ok",
+		Detail: fmt.Sprintf("Item with id '%s' deleted", id),
+	}
+
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	// Маршруты API
 	http.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
@@ -105,6 +148,8 @@ func main() {
 	http.HandleFunc("/items/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			getItem(w, r)
+		} else if r.Method == http.MethodDelete {
+			deleteItem(w, r)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
