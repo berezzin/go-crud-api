@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/swaggo/http-swagger" // Swagger UI
-	_ "go-crud-api/docs"             // Импортируйте документацию
+	"github.com/swaggo/http-swagger"
+	_ "go-crud-api/docs"
 )
 
 // @title CRUD Go API
