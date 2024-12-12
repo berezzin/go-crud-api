@@ -63,6 +63,7 @@ func createItem(w http.ResponseWriter, r *http.Request) {
 	mutex.Lock()
 	items[item.ID] = item
 	mutex.Unlock()
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(item)
 }
@@ -124,8 +125,8 @@ func deleteItem(w http.ResponseWriter, r *http.Request) {
 	}
 	delete(items, id)
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
 	response := Response{
 		Status: "ok",
