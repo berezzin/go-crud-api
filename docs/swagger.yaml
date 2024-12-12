@@ -3,13 +3,13 @@ definitions:
   main.Item:
     properties:
       id:
-        description: Уникальный идентификатор
+        description: Unique ID
         type: string
       name:
-        description: Название
+        description: Object's name
         type: string
       price:
-        description: Цена
+        description: Price
         type: number
     type: object
 host: localhost:8080
@@ -30,14 +30,14 @@ paths:
             additionalProperties:
               $ref: '#/definitions/main.Item'
             type: object
-      summary: Возвращает список объектов
+      summary: Return list of all Items.
       tags:
       - Items
     post:
       consumes:
       - application/json
       parameters:
-      - description: Новый объект
+      - description: New Item
         in: body
         name: item
         required: true
@@ -50,7 +50,35 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/main.Item'
-      summary: Создает новый объект
+      summary: Create a new Item object.
+      tags:
+      - Items
+  /items/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Object's ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Item'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Item not found
+          schema:
+            type: string
+      summary: get Item by ID.
       tags:
       - Items
 swagger: "2.0"

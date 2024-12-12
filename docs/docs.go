@@ -23,7 +23,7 @@ const docTemplate = `{
                 "tags": [
                     "Items"
                 ],
-                "summary": "Возвращает список объектов",
+                "summary": "Return list of all Items.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -46,10 +46,10 @@ const docTemplate = `{
                 "tags": [
                     "Items"
                 ],
-                "summary": "Создает новый объект",
+                "summary": "Create a new Item object.",
                 "parameters": [
                     {
-                        "description": "Новый объект",
+                        "description": "New Item",
                         "name": "item",
                         "in": "body",
                         "required": true,
@@ -67,6 +67,49 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/items/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Items"
+                ],
+                "summary": "get Item by ID.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Object's ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Item"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Item not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -74,15 +117,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "Уникальный идентификатор",
+                    "description": "Unique ID",
                     "type": "string"
                 },
                 "name": {
-                    "description": "Название",
+                    "description": "Object's name",
                     "type": "string"
                 },
                 "price": {
-                    "description": "Цена",
+                    "description": "Price",
                     "type": "number"
                 }
             }
