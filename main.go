@@ -34,7 +34,7 @@ var (
 // @Produce json
 // @Success 200 {object} map[string]Item
 // @Router /items [get]
-func getItems(w http.ResponseWriter, r *http.Request) {
+func getItems(w http.ResponseWriter) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	w.Header().Set("Content-Type", "application/json")
@@ -96,7 +96,7 @@ func main() {
 	// Маршруты API
 	http.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
-			getItems(w, r)
+			getItems(w)
 		} else if r.Method == http.MethodPost {
 			createItem(w, r)
 		}
