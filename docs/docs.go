@@ -30,7 +30,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
-                                "$ref": "#/definitions/main.Item"
+                                "$ref": "#/definitions/structures.Item"
                             }
                         }
                     }
@@ -54,7 +54,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.Item"
+                            "$ref": "#/definitions/structures.Item"
                         }
                     }
                 ],
@@ -62,7 +62,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/main.Item"
+                            "$ref": "#/definitions/structures.Item"
                         }
                     }
                 }
@@ -93,7 +93,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Item"
+                            "$ref": "#/definitions/structures.Item"
                         }
                     },
                     "400": {
@@ -134,7 +134,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Response"
+                            "$ref": "#/definitions/structures.Response"
                         }
                     },
                     "400": {
@@ -154,7 +154,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "main.Item": {
+        "structures.Item": {
             "type": "object",
             "properties": {
                 "id": {
@@ -171,7 +171,7 @@ const docTemplate = `{
                 }
             }
         },
-        "main.Response": {
+        "structures.Response": {
             "type": "object",
             "properties": {
                 "detail": {

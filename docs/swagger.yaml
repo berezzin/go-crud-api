@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  main.Item:
+  structures.Item:
     properties:
       id:
         description: Unique ID
@@ -12,7 +12,7 @@ definitions:
         description: Price
         type: number
     type: object
-  main.Response:
+  structures.Response:
     properties:
       detail:
         type: string
@@ -35,7 +35,7 @@ paths:
           description: OK
           schema:
             additionalProperties:
-              $ref: '#/definitions/main.Item'
+              $ref: '#/definitions/structures.Item'
             type: object
       summary: Return list of all Items.
       tags:
@@ -49,14 +49,14 @@ paths:
         name: item
         required: true
         schema:
-          $ref: '#/definitions/main.Item'
+          $ref: '#/definitions/structures.Item'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/main.Item'
+            $ref: '#/definitions/structures.Item'
       summary: Create a new Item object.
       tags:
       - Items
@@ -76,7 +76,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Response'
+            $ref: '#/definitions/structures.Response'
         "400":
           description: Bad request
           schema:
@@ -103,7 +103,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Item'
+            $ref: '#/definitions/structures.Item'
         "400":
           description: Bad request
           schema:

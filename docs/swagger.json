@@ -24,7 +24,7 @@
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
-                                "$ref": "#/definitions/main.Item"
+                                "$ref": "#/definitions/structures.Item"
                             }
                         }
                     }
@@ -48,7 +48,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.Item"
+                            "$ref": "#/definitions/structures.Item"
                         }
                     }
                 ],
@@ -56,7 +56,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/main.Item"
+                            "$ref": "#/definitions/structures.Item"
                         }
                     }
                 }
@@ -87,7 +87,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Item"
+                            "$ref": "#/definitions/structures.Item"
                         }
                     },
                     "400": {
@@ -128,7 +128,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Response"
+                            "$ref": "#/definitions/structures.Response"
                         }
                     },
                     "400": {
@@ -148,7 +148,7 @@
         }
     },
     "definitions": {
-        "main.Item": {
+        "structures.Item": {
             "type": "object",
             "properties": {
                 "id": {
@@ -165,7 +165,7 @@
                 }
             }
         },
-        "main.Response": {
+        "structures.Response": {
             "type": "object",
             "properties": {
                 "detail": {
