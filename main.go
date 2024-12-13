@@ -81,6 +81,10 @@ func getItem(w http.ResponseWriter, r *http.Request) {
 
 	item, err := db.GetItem(id)
 	if err != nil {
+		if err.Error() == "no rows in result set" {
+			http.Error(w, "Not found", http.StatusNotFound)
+			return
+		}
 		http.Error(w, "Unexpected error", http.StatusInternalServerError)
 		log.Println(err.Error())
 		return
@@ -107,8 +111,14 @@ func deleteItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := db.DeleteItem(id); err != nil {
-		http.Error(w, "Item not found", http.StatusNotFound)
+	err := db.DeleteItem(id)
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			http.Error(w, "Not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Unexpected error", http.StatusInternalServerError)
+		log.Println(err.Error())
 		return
 	}
 
