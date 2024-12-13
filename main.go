@@ -3,14 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/swaggo/http-swagger"
 	"go-crud-api/db"
+	_ "go-crud-api/docs"
 	"go-crud-api/structures"
 	"log"
 	"net/http"
-	"sync"
-
-	"github.com/swaggo/http-swagger"
-	_ "go-crud-api/docs"
 )
 
 // @title CRUD Go API
@@ -19,11 +17,6 @@ import (
 // @host localhost:8080
 // @BasePath /
 
-var (
-	items = make(map[string]structures.Item)
-	mutex sync.Mutex
-)
-
 // getItems Get list of Items.
 // @Summary Return list of all Items.
 // @Tags Items
@@ -31,9 +24,15 @@ var (
 // @Success 200 {object} map[string]structures.Item
 // @Router /items [get]
 func getItems(w http.ResponseWriter) {
-	mutex.Lock()
-	defer mutex.Unlock()
+	items, err := db.GetItems()
+	if err != nil {
+		http.Error(w, "Unexpected error", http.StatusInternalServerError)
+		log.Println(err.Error())
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
+
 	json.NewEncoder(w).Encode(items)
 }
 
@@ -51,9 +50,13 @@ func createItem(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	mutex.Lock()
-	items[item.ID] = item
-	mutex.Unlock()
+
+	if err := db.AddItem(item); err != nil {
+		http.Error(w, "Unexpected error", http.StatusInternalServerError)
+		log.Println(err.Error())
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(item)
@@ -76,12 +79,10 @@ func getItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	item, exists := items[id]
-	if !exists {
-		http.Error(w, "Item not found", http.StatusNotFound)
+	item, err := db.GetItem(id)
+	if err != nil {
+		http.Error(w, "Unexpected error", http.StatusInternalServerError)
+		log.Println(err.Error())
 		return
 	}
 
@@ -106,15 +107,10 @@ func deleteItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	_, exists := items[id]
-	if !exists {
+	if err := db.DeleteItem(id); err != nil {
 		http.Error(w, "Item not found", http.StatusNotFound)
 		return
 	}
-	delete(items, id)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
