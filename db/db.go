@@ -93,12 +93,7 @@ func DeleteItem(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	_, err := GetItem(id)
-	if err != nil {
-		return err
-	}
-
 	query := "DELETE FROM items WHERE id=$1"
-	_, err = Pool.Exec(ctx, query, id)
+	_, err := Pool.Exec(ctx, query, id)
 	return err
 }

@@ -111,12 +111,19 @@ func deleteItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := db.DeleteItem(id)
+	_, err := db.GetItem(id)
 	if err != nil {
 		if err.Error() == "no rows in result set" {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
+		http.Error(w, "Unexpected error", http.StatusInternalServerError)
+		log.Println(err.Error())
+		return
+	}
+
+	err = db.DeleteItem(id)
+	if err != nil {
 		http.Error(w, "Unexpected error", http.StatusInternalServerError)
 		log.Println(err.Error())
 		return
