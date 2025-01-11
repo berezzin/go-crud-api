@@ -9,6 +9,9 @@ import (
 	"go-crud-api/structures"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 // @title CRUD Go API
@@ -165,6 +168,12 @@ func main() {
 	// Swagger-документация
 	http.HandleFunc("/docs/", httpSwagger.WrapHandler)
 
+	stop := make(chan os.Signal)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+
 	log.Println("Starting server at port 8080")
-	http.ListenAndServe(":8080", nil)
+	go http.ListenAndServe(":8080", nil)
+
+	<-stop
+	log.Println("Server stopped")
 }
